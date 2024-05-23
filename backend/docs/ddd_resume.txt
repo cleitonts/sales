@@ -1,0 +1,34 @@
+Intro
+    This is not the common usage of DDD, I disapprove the excess of complexity of the architectures normally used with.
+    So this is my interpretation of the DDD and a custom architecture to balance the code quality and complexity.
+    Avoid using Events. It's hard to debug and possible to skip.
+    We must take care of SOLID principles.
+    Stick to real names, like hireEmployee() instead of register.
+
+Domain
+    MUST NOT DEPEND ON ANYTHING OUTSIDE THIS LAYER
+    entities, domain services and interfaces to allow communication with outside.
+
+    Em um sistema de e-commerce pode haver um Domain Service chamado "CarrinhoService",
+    que é responsável por calcular o valor total do carrinho de compras,
+    aplicar descontos ou promoções, verificar a disponibilidade de produtos no estoque,
+    entre outras operações relacionadas ao carrinho. Essas operações envolvem a interação de várias entidades, como produtos,
+    clientes e estoque. Logo não são responsabilidade exclusiva de uma única entidade. Neste caso CarrinhoService deve chamar
+    um metodo de algum objeto que passou por implementação de uma interface previamente definida dentro do dominio.
+
+Infraestructure
+    contains concretions of the interfaces of Domain layer. Do communication with exterior data sources like redis or another API.
+    CAN ONLY DEPEND ON DOMAIN LAYER
+
+Application
+    serviços de aplicação que orquestram as operações do domínio.
+    Esses serviços devem conter a lógica de aplicação, como a coordenação de entidades e a execução de regras de negócio.
+    procure sempre que possivel quebrar a logica e codigos nos menores metodos/serviços.
+    Se eu quero realizar um registro isto inclui enviar e-mail, executar primeiro os metodos de validação, persistencia e depois
+    chamar outro metodo que faça somente o envio do email. "SRP"
+    Criar DTOs pequenas e especializadas também, reutilização de DTO NÃO É um MUST.
+    CAN ONLY DEPEND ON DOMAIN AND INFRAESTRUCTURE LAYERS
+
+UI
+    Input and Output of the api, like controller and commands
+    CAN ONLY TALK TO APPLICATION LAYER

@@ -1,0 +1,51 @@
+deptrac:
+  paths:
+    - ./src
+  exclude_files:
+    - src/Kernel.php
+  layers:
+    - name: CoreApplication
+      collectors:
+        - type: className
+          regex: .*App\\Core\\Application\\(?!Query).*
+
+    - name: CoreDomain
+      collectors:
+        - type: className
+          regex: .*App\\Core\\Domain\\.*
+
+    - name: CoreInfrastructure
+      collectors:
+        - type: className
+          regex: .*App\\Core\\Infrastructure\\.*
+
+    - name: CorePorts
+      collectors:
+        - type: className
+          regex: .*App\\Core\\Ports\\.*
+
+    - name: SharedDomain
+      collectors:
+        - type: className
+          regex: .*App\\Shared\\Domain\\.*
+
+    - name: SharedInfrastructure
+      collectors:
+        - type: className
+          regex: .*App\\Shared\\Infrastructure\\.*
+
+  ruleset:
+    CoreApplication:
+      - CoreDomain
+      - SharedDomain
+    CoreDomain:
+      - SharedDomain
+    CorePorts:
+      - CoreApplication
+      - CoreInfrastructure
+      - SharedInfrastructure
+    CoreInfrastructure:
+      - CoreDomain
+    SharedDomain: ~
+    SharedInfrastructure:
+      - SharedDomain

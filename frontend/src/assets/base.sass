@@ -1,0 +1,34 @@
+@use "sass:color"
+@use "sass:map"
+@import template/variables/colors
+@import template/variables/btn
+@import './template/sections/background.scss'
+
+.dp__input_wrap
+  box-sizing: border-box
+.dp__clear_icon
+  top: calc(50% - 10px)
+
+.icon-wrapper
+  width: 64px
+  height: 64px
+
+i.fa.v-icon
+  margin-top: -4px
+
+.icon-fix i.fas.v-icon
+  margin-top: -4px
+  margin-left: 3px
+
+::-webkit-scrollbar
+  width: 10px
+
+::-webkit-scrollbar-track
+  background: rgba(255, 255, 255, 0.7)
+
+::-webkit-scrollbar-thumb
+  background-color: $primary
+  background-image: linear-gradient(195deg, $primary, lighten($primary, 10%))
+  
+.v-select__content 
+  max-height: 400px !important

@@ -1,0 +1,15 @@
+@import colors
+
+$btn-list: ('primary': $primary, 'success': $success, 'info': $info, 'warning': $warning, 'danger': $danger, 'secondary': $secondary, 'dark': $dark)
+
+@each $name, $value in $btn-list
+  .bg-#{$name}-gradient, .v-btn.#{$name}
+    color: $text-light
+    background-color: $value
+    background-image: linear-gradient(195deg, $value, lighten($value, 10%))
+
+  .bg-#{$name}-gradient, .v-btn.#{$name}.v-btn--elevated
+    box-shadow: 0 3px 3px 0 rgba($value, .15), 0 3px 1px -2px rgba($value, .2), 0 1px 5px 0 rgba($value, .15)
+
+  .v-btn.#{$name}.v-btn--elevated:hover
+    box-shadow: 0 14px 26px -12px rgba($value, .4), 0 4px 23px 0 rgba($value, .15), 0 8px 10px -5px rgba($value, .2)

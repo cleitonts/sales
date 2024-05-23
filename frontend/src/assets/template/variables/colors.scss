@@ -1,0 +1,42 @@
+/**
+ original
+ #43a047
+ #ffb931
+ #1f94ce
+ #1f94ce
+ #96588a
+ #636974
+ #4416a4
+ */
+$background: #eff1f4;
+$surface: #fdfdfe;
+$text-light: $surface;
+$text-dark: #344767;
+$surfaceLighten: #fff;
+$primary: #2d3753;
+$secondary: #96588a;
+$error: #f44335;
+$danger: $error;
+$info: #03a9f4;
+$accent: #388e3c;
+$warning: #ffb931;
+$success: #43a047;
+$dark: #191919;
+
+//never changes any value in this array, do it in the upwards vars
+$theme-colors: (
+  background: $background,
+  textLight: $text-light,
+  textDark: $text-dark,
+  surface: $surface,
+  surfaceLighten: $surfaceLighten,
+  primary: $primary,
+  secondary: $secondary,
+  error: $error,
+  danger: $danger,
+  dark: $dark,
+  info: $info,
+  success: $success,
+  warning: $warning,
+  accent: $accent,
+);
