@@ -2,33 +2,57 @@
 
 namespace App\Core\Infrastructure\Repository;
 
+use App\Core\Application\Query\Task\GetTasks\GetTasksQuery;
 use App\Core\Domain\Model\Task\Task;
 use App\Core\Domain\Model\Task\TaskRepositoryInterface;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Shared\Infrastructure\Type\DateTimeFormatEnum;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
+use Doctrine\Persistence\ManagerRegistry;
 
-class TaskRepository implements TaskRepositoryInterface
+class TaskRepository extends ServiceEntityRepository implements TaskRepositoryInterface
 {
-    private EntityManagerInterface $em;
-
-    public function __construct(EntityManagerInterface $em)
+    public function __construct(ManagerRegistry $registry)
     {
-        $this->em = $em;
+        parent::__construct($registry, Task::class);
     }
 
-    public function find(int $id): ?Task
+    public function GetAll(GetTasksQuery $query, int $userId): QueryBuilder
     {
-        return $this->em->find(Task::class, $id);
+        $qb = $this->createQueryBuilder('t')
+            ->innerJoin('t.user', 'u')
+            ->orderBy('p.name', 'DESC')
+            ->where('u.id = :userId')
+            ->orderBy('t.createdAt')
+            ->setFirstResult($query->getPagination()->getOffset())
+            ->setMaxResults($query->getPagination()->getLimit())
+            ->setParameter('userId', $userId);
+
+        if (null !== $query->getExecutionDate()) {
+            $executionDay = $query->getExecutionDate()->setTime(0, 0);
+            $qb->andWhere('t.executionDay >= :fromTime')
+                ->andWhere('t.executionDay < :toTime')
+                ->setParameter('fromTime', $executionDay->format(DateTimeFormatEnum::DATETIME_FORMAT->value))
+                ->setParameter('toTime', $executionDay->modify('+1 day')->format(DateTimeFormatEnum::DATETIME_FORMAT->value));
+        }
+
+        if (null !== $query->getSearchText()) {
+            $qb->andWhere('t.title LIKE :searchText OR t.description LIKE :searchText')
+                ->setParameter('searchText', "%{$query->getSearchText()}%");
+        }
+
+        return $qb;
     }
 
     public function add(Task $task): void
     {
-        $this->em->persist($task);
-        $this->em->flush();
+        $this->getEntityManager()->persist($task);
+        $this->getEntityManager()->flush();
     }
 
     public function remove(Task $task): void
     {
-        $this->em->remove($task);
-        $this->em->flush();
+        $this->getEntityManager()->remove($task);
+        $this->getEntityManager()->flush();
     }
 }

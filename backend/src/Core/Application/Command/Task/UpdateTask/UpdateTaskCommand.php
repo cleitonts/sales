@@ -8,12 +8,14 @@ use App\Core\Application\Command\Task\TaskCommand;
 
 final class UpdateTaskCommand extends TaskCommand
 {
-    private int $id;
-
-    public function __construct(int $id, string $title, \DateTimeImmutable $executionDay, string $description = '')
-    {
+    public function __construct(
+        private int $id,
+        string $title,
+        \DateTimeImmutable
+        $executionDay,
+        string $description = ''
+    ){
         parent::__construct($title, $executionDay, $description);
-        $this->id = $id;
     }
 
     public function getId(): int

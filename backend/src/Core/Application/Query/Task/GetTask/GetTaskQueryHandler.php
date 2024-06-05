@@ -13,14 +13,10 @@ use Doctrine\ORM\EntityManagerInterface;
 
 final class GetTaskQueryHandler
 {
-    private EntityManagerInterface $em;
-
-    private UserFetcherInterface $userFetcher;
-
-    public function __construct(EntityManagerInterface $em, UserFetcherInterface $userFetcher)
-    {
-        $this->em = $em;
-        $this->userFetcher = $userFetcher;
+    public function __construct(
+        private EntityManagerInterface $em,
+        private UserFetcherInterface $userFetcher
+    ){
     }
 
     public function __invoke(GetTaskQuery $query): TaskDTO

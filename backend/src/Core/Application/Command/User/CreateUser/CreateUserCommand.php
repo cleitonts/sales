@@ -6,14 +6,10 @@ namespace App\Core\Application\Command\User\CreateUser;
 
 final class CreateUserCommand
 {
-    private string $username;
-
-    private string $password;
-
-    public function __construct(string $username, string $password)
-    {
-        $this->username = $username;
-        $this->password = $password;
+    public function __construct(
+        private string $username,
+        private string $password
+    ){
     }
 
     public function getUsername(): string

@@ -12,9 +12,6 @@ use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Messenger\HandleTrait;
 use Symfony\Component\Messenger\MessageBusInterface;
 
-/**
- * For internal usage.
- */
 final class AddUserCommand extends Command
 {
     use HandleTrait;

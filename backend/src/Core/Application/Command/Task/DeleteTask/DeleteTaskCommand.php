@@ -6,11 +6,10 @@ namespace App\Core\Application\Command\Task\DeleteTask;
 
 final class DeleteTaskCommand
 {
-    private int $id;
-
-    public function __construct(int $id)
+    public function __construct(
+        private int $id
+    )
     {
-        $this->id = $id;
     }
 
     public function getId(): int

@@ -6,17 +6,11 @@ namespace App\Core\Application\Command\Task;
 
 abstract class TaskCommand
 {
-    protected string $title;
-
-    protected \DateTimeImmutable $executionDay;
-
-    protected string $description;
-
-    public function __construct(string $title, \DateTimeImmutable $executionDay, string $description = '')
-    {
-        $this->title = $title;
-        $this->executionDay = $executionDay;
-        $this->description = $description;
+    public function __construct(
+        protected string $title,
+        protected \DateTimeImmutable $executionDay,
+        protected string $description = ''
+    ){
     }
 
     public function getTitle(): string

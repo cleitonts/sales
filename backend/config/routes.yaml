@@ -1,10 +1,25 @@
 controllers:
-    resource: ../../src/Core/Ports/Rest/
+    resource: ../src/Core/Ports/Rest/
     type: annotation
 
 kernel:
-    resource: ../../src/Kernel.php
+    resource: ../src/Kernel.php
     type: annotation
 
 api_login_check:
     path: /api/login_check
+
+#app.swagger_ui:
+#    path: /oa/doc
+#    methods: GET
+#    defaults: { _controller: nelmio_api_doc.controller.swagger_ui }
+#
+#app.redocly:
+#    path: /oa/doc
+#    methods: GET
+#    defaults: { _controller: nelmio_api_doc.controller.redocly }
+#
+#app.swagger:
+#    path: /oa/doc.json
+#    methods: GET
+#    defaults: { _controller: nelmio_api_doc.controller.swagger }

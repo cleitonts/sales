@@ -10,14 +10,10 @@ use App\Core\Domain\Model\User\UserFetcherInterface;
 
 final class CreateTaskCommandHandler
 {
-    private TaskRepositoryInterface $taskRepository;
-
-    private UserFetcherInterface $userFetcher;
-
-    public function __construct(TaskRepositoryInterface $taskRepository, UserFetcherInterface $userFetcher)
-    {
-        $this->taskRepository = $taskRepository;
-        $this->userFetcher = $userFetcher;
+    public function __construct(
+        private TaskRepositoryInterface $taskRepository,
+        private UserFetcherInterface $userFetcher
+    ){
     }
 
     public function __invoke(CreateTaskCommand $command): int

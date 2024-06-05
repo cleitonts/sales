@@ -6,11 +6,9 @@ namespace App\Core\Application\Command\Task\MakeTaskDone;
 
 final class MakeTaskDoneCommand
 {
-    private int $id;
-
-    public function __construct(int $id)
-    {
-        $this->id = $id;
+    public function __construct(
+        private int $id
+    ){
     }
 
     public function getId(): int

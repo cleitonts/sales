@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Shared\Infrastructure\Http;
 
 use App\Shared\Domain\Service\Assert\Assert;
-use App\Shared\Infrastructure\Type\DateTimeFormat;
+use App\Shared\Infrastructure\Type\DateTimeFormatEnum;
 use Symfony\Component\HttpFoundation\Request;
 
 final class ParamFetcher
@@ -40,6 +40,10 @@ final class ParamFetcher
 
     public static function fromRequestBody(Request $request): self
     {
+        $content = $request->getContent();
+        if($content){
+            return new self(json_decode($content, true));
+        }
         return new self($request->request->all());
     }
 
@@ -128,7 +132,7 @@ final class ParamFetcher
                 break;
 
             case self::TYPE_DATE:
-                Assert::dateTimeString($this->data[$key], DateTimeFormat::DATE_FORMAT, sprintf('"%s" should be a valid format "%s" date', $key, DateTimeFormat::DATE_FORMAT));
+                Assert::dateTimeString($this->data[$key], DateTimeFormatEnum::DATETIME_FORMAT->value, sprintf('"%s" should be a valid format "%s" date', $key, DateTimeFormatEnum::DATETIME_FORMAT->value));
                 break;
         }
     }

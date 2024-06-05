@@ -22,11 +22,11 @@ final class TaskDTO
 
     public static function fromEntity(Task $task): TaskDTO
     {
-        $dto = new static();
+        $dto = new TaskDTO();
         $dto->setId($task->getId());
         $dto->setTitle($task->getTitle());
         $dto->setDescription($task->getDescription());
-        $dto->setStatus((string) $task->getStatus());
+        $dto->setStatus($task->getStatus()->value);
         $dto->setExecutionDay($task->getExecutionDay());
         $dto->setCreatedAt($task->getCreatedAt());
 
@@ -35,20 +35,21 @@ final class TaskDTO
 
     /**
      * @param array<string, mixed> $data
+     * @throws \Exception
      */
     public static function fromQueryArray(array $data): TaskDTO
     {
-        if (!isset($data['id'], $data['title'], $data['description'], $data['status'], $data['execution_day'], $data['created_at'])) {
+        if (!isset($data['id'], $data['title'], $data['description'], $data['status'], $data['executionDay'], $data['createdAt'])) {
             throw new \InvalidArgumentException(sprintf('Not all keys are set or null %s', var_export($data, true)));
         }
 
-        $dto = new static();
+        $dto = new TaskDTO();
         $dto->setId((int) $data['id']);
         $dto->setTitle($data['title']);
         $dto->setDescription($data['description']);
-        $dto->setStatus($data['status']);
-        $dto->setExecutionDay(new \DateTimeImmutable($data['execution_day']));
-        $dto->setCreatedAt(new \DateTimeImmutable($data['created_at']));
+        $dto->setStatus($data['status']->value);
+        $dto->setExecutionDay($data['executionDay']);
+        $dto->setCreatedAt($data['createdAt']);
 
         return $dto;
     }

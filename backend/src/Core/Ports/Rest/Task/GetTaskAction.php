@@ -6,10 +6,10 @@ namespace App\Core\Ports\Rest\Task;
 
 use App\Core\Application\Query\Task\DTO\TaskDTO;
 use App\Core\Application\Query\Task\GetTask\GetTaskQuery;
-use App\Shared\Infrastructure\Http\HttpSpec;
+use App\Shared\Infrastructure\Http\HttpSpecEnum;
 use App\Shared\Infrastructure\Http\ParamFetcher;
 use Nelmio\ApiDocBundle\Annotation\Model;
-use OpenApi\Annotations as OA;
+use OpenApi\Attributes as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,21 +30,18 @@ final class GetTaskAction
         $this->normalizer = $normalizer;
     }
 
-    /**
-     * @Route("/api/tasks/{id}", methods={"GET"}, requirements={"id": "\d+"}, name="api_get_task")
-     *
-     * @OA\Response(
-     *     response=Response::HTTP_OK,
-     *     description=HttpSpec::STR_HTTP_OK,
-     *
-     *     @OA\Schema(ref=@Model(type=TaskDTO::class, groups={"task_view"}))
-     * )
-     *
-     * @OA\Response(response=Response::HTTP_NOT_FOUND, description=HttpSpec::STR_HTTP_NOT_FOUND)
-     * @OA\Response(response=Response::HTTP_UNAUTHORIZED, description=HttpSpec::STR_HTTP_UNAUTHORIZED)
-     *
-     * @OA\Tag(name="Task")
-     */
+    #[Route(path: '/api/tasks/{id}', name: 'api_get_task', requirements: ['id' => '\d+'], methods: ['GET'])]
+    #[OA\Response(
+        response: Response::HTTP_OK,
+        description: HttpSpecEnum::STR_HTTP_OK->value,
+        content: new OA\JsonContent(
+            ref: new Model(type: TaskDTO::class, groups: ['task_view']),
+            type: 'object'
+        )
+    )]
+    #[OA\Response(response: Response::HTTP_NOT_FOUND, description: HttpSpecEnum::STR_HTTP_NOT_FOUND->value)]
+    #[OA\Response(response: Response::HTTP_UNAUTHORIZED, description: HttpSpecEnum::STR_HTTP_UNAUTHORIZED->value)]
+    #[OA\Tag(name: 'Task')]
     public function __invoke(Request $request): Response
     {
         $route = ParamFetcher::fromRequestAttributes($request);

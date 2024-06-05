@@ -7,34 +7,31 @@ namespace App\Core\Application\Command\User\CreateUser;
 use App\Core\Domain\Model\User\UniqueUsernameSpecificationInterface;
 use App\Core\Domain\Model\User\User;
 use App\Core\Domain\Model\User\UserRepositoryInterface;
-use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
+use App\Shared\Domain\Exception\InvalidInputDataException;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 final class CreateUserCommandHandler
 {
-    private EncoderFactoryInterface $encoderFactory;
-
-    private UserRepositoryInterface $userRepository;
-
-    private UniqueUsernameSpecificationInterface $uniqueUsernameSpecification;
-
     public function __construct(
-        EncoderFactoryInterface $encoderFactory,
-        UserRepositoryInterface $userRepository,
-        UniqueUsernameSpecificationInterface $uniqueUsernameSpecification
+        private UserPasswordHasherInterface $passwordHasher,
+        private UserRepositoryInterface $userRepository
     ) {
-        $this->encoderFactory = $encoderFactory;
-        $this->userRepository = $userRepository;
-        $this->uniqueUsernameSpecification = $uniqueUsernameSpecification;
     }
 
     public function __invoke(CreateUserCommand $command): void
     {
-        $encoder = $this->encoderFactory->getEncoder(User::class);
-        $user = new User(
-            $command->getUsername(),
-            $encoder->encodePassword($command->getPassword(), null),
-            $this->uniqueUsernameSpecification
+        if (!$this->userRepository->isSatisfiedBy($command->getUsername())) {
+            throw new InvalidInputDataException(sprintf('Username %s already exists', $command->getUsername()));
+        }
+
+        $user = new User($command->getUsername());
+
+        $hashedPassword = $this->passwordHasher->hashPassword(
+            $user,
+            $command->getPassword()
         );
+
+        $user->setPassword($hashedPassword);
         $this->userRepository->add($user);
     }
 }

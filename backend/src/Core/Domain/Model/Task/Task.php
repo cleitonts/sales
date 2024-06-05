@@ -7,60 +7,44 @@ namespace App\Core\Domain\Model\Task;
 use App\Core\Domain\Model\User\User;
 use App\Shared\Domain\Exception\BusinessLogicViolationException;
 use App\Shared\Domain\Model\Aggregate;
+use App\Shared\Domain\Service\Assert\Assert;
 use Doctrine\ORM\Mapping as ORM;
+
 
 /**
  * @ORM\Entity()
- *
- * @ORM\Table(indexes={@ORM\Index(name="task_status_idx", columns={"status"})})
+ * @ORM\Table(name="task",
+ *     indexes={@ORM\Index(name="task_status_idx", columns={"status"})}
+ * )
  */
 class Task extends Aggregate
 {
-    use TaskGS;
-
-    public const MIN_TITLE_LENGTH = 5;
-    public const MAX_TITLE_LENGTH = 100;
-    public const MAX_DESCRIPTION_LENGTH = 100;
-
     /**
      * @ORM\Id()
-     *
      * @ORM\GeneratedValue()
-     *
      * @ORM\Column(type="integer", options={"unsigned"=true})
      */
     private int $id;
 
-    /**
-     * @ORM\Column(type="string", length=100, nullable=false)
-     */
+    /** @ORM\Column(type="string", length=100, nullable=false) */
     private string $title;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=false)
-     */
+    /** @ORM\Column(type="string", length=255, nullable=false) */
     private string $description;
 
-    /**
-     * @ORM\Embedded(class="App\Core\Domain\Model\Task\Status", columnPrefix=false)
-     */
-    private Status $status;
+    /** @ORM\Column(type="string", enumType=StatusEnum::class) */
+    private StatusEnum $status;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Core\Domain\Model\User\User")
-     *
      * @ORM\JoinColumn(onDelete="cascade", nullable=false)
      */
     private User $user;
 
-    /**
-     * @ORM\Column(type="datetime_immutable", nullable=true)
-     */
+    /** @ORM\Column(type="datetime_immutable", nullable=true)  */
     private \DateTimeImmutable $executionDay;
 
-    /**
-     * @ORM\Column(type="datetime_immutable", nullable=true)
-     */
+    /** @ORM\Column(type="datetime_immutable", nullable=true)  */
     private \DateTimeImmutable $createdAt;
 
     public function __construct(string $title, \DateTimeImmutable $executionDay, User $user, string $description = '')
@@ -69,13 +53,11 @@ class Task extends Aggregate
         $this->setExecutionDay($executionDay);
         $this->setUser($user);
         $this->setDescription($description);
-        $this->setStatus(Status::NEW());
+        $this->setStatus(StatusEnum::NEW);
         $this->setCreatedAt(new \DateTimeImmutable());
 
         $this->raise(new TaskCreatedEvent($this));
     }
-
-    // API
 
     public function changeTitle(string $title): void
     {
@@ -94,29 +76,101 @@ class Task extends Aggregate
 
     public function done(): void
     {
-        if ($this->status->is(Status::DONE)) {
+        if ($this->status == StatusEnum::DONE) {
             return;
         }
 
-        if ($this->status->is(Status::DECLINED)) {
+        if ($this->status == StatusEnum::DECLINED) {
             throw new BusinessLogicViolationException('Declined task can\'t be done');
         }
 
-        $this->setStatus(Status::DONE());
+        $this->setStatus(StatusEnum::DONE);
         $this->raise(new TaskDoneEvent($this));
     }
 
     public function decline(): void
     {
-        if ($this->status->is(Status::DECLINED)) {
+        if ($this->status == StatusEnum::DECLINED) {
             return;
         }
 
-        if ($this->status->is(Status::DONE)) {
+        if ($this->status == StatusEnum::DONE) {
             throw new BusinessLogicViolationException('Done task can\'t be declined');
         }
 
-        $this->setStatus(Status::DECLINED());
+        $this->setStatus(StatusEnum::DECLINED);
         $this->raise(new TaskDeclinedEvent($this));
+    }
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function getTitle(): string
+    {
+        return $this->title;
+    }
+
+    public function getExecutionDay(): \DateTimeImmutable
+    {
+        return $this->executionDay;
+    }
+
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    public function getDescription(): string
+    {
+        return $this->description;
+    }
+
+    public function getStatus(): StatusEnum
+    {
+        return $this->status;
+    }
+
+    public function getCreatedAt(): \DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    private function setTitle(string $title): void
+    {
+        Assert::minLength($title, 5, 'Title should contain at least %2$s characters. Got: %s');
+        Assert::maxLength($title, 100, 'Title should contain at most %2$s characters. Got: %s');
+        $this->title = $title;
+    }
+
+    private function setDescription(string $description): void
+    {
+        Assert::maxLength($description, 100, 'Description should contain at most %2$s characters. Got: %s');
+        $this->description = $description;
+    }
+
+    private function setUser(User $user): void
+    {
+        $this->user = $user;
+    }
+
+    private function setStatus(StatusEnum $status): void
+    {
+        $this->status = $status;
+    }
+
+    private function setExecutionDay(\DateTimeImmutable $executionDay): void
+    {
+        $executionDayNormalized = $executionDay->setTime(0, 0);
+        $now = (new \DateTimeImmutable())->setTime(0, 0);
+
+        Assert::greaterThanEq($executionDayNormalized, $now, 'Execution day should be not in past');
+
+        $this->executionDay = $executionDayNormalized;
+    }
+
+    private function setCreatedAt(\DateTimeImmutable $createdAt): void
+    {
+        $this->createdAt = $createdAt;
     }
 }

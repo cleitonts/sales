@@ -9,11 +9,9 @@ use Psr\Log\LoggerInterface;
 
 final class TaskDeclinedEventHandler
 {
-    private LoggerInterface $logger;
-
-    public function __construct(LoggerInterface $logger)
-    {
-        $this->logger = $logger;
+    public function __construct(
+        private LoggerInterface $logger
+    ){
     }
 
     public function __invoke(TaskDeclinedEvent $event): void
