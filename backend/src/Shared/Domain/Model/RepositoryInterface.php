@@ -9,5 +9,4 @@ use Doctrine\Persistence\ObjectRepository;
 
 interface RepositoryInterface extends ObjectRepository, Selectable
 {
-
 }

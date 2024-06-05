@@ -12,6 +12,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity()
+ *
  * @ORM\Table(name="`user`")
  */
 class User extends Aggregate implements UserInterface, PasswordAuthenticatedUserInterface
@@ -22,7 +23,9 @@ class User extends Aggregate implements UserInterface, PasswordAuthenticatedUser
 
     /**
      * @ORM\Id()
+     *
      * @ORM\GeneratedValue()
+     *
      * @ORM\Column(type="integer", options={"unsigned"=true})
      */
     private int $id;
@@ -32,6 +35,7 @@ class User extends Aggregate implements UserInterface, PasswordAuthenticatedUser
 
     /**
      * @var array<int, string>
+     *
      * @ORM\Column(type="json", nullable=false)
      */
     private array $roles = [];

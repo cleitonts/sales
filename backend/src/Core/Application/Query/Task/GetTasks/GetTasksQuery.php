@@ -12,7 +12,7 @@ final class GetTasksQuery
         private Pagination $pagination,
         private ?\DateTimeImmutable $executionDate = null,
         private ?string $searchText = null
-    ){
+    ) {
     }
 
     public function getPagination(): Pagination

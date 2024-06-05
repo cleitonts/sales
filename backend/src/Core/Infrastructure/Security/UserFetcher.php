@@ -12,7 +12,7 @@ final class UserFetcher implements UserFetcherInterface
 {
     public function __construct(
         private Security $security
-    ){
+    ) {
     }
 
     public function fetchRequiredUser(): User

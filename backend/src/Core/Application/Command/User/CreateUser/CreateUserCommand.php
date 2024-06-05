@@ -9,7 +9,7 @@ final class CreateUserCommand
     public function __construct(
         private string $username,
         private string $password
-    ){
+    ) {
     }
 
     public function getUsername(): string

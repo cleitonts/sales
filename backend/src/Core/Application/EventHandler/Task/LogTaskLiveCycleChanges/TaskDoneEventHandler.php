@@ -11,7 +11,7 @@ final class TaskDoneEventHandler
 {
     public function __construct(
         private LoggerInterface $logger
-    ){
+    ) {
     }
 
     public function __invoke(TaskDoneEvent $event): void

@@ -10,7 +10,7 @@ abstract class TaskCommand
         protected string $title,
         protected \DateTimeImmutable $executionDay,
         protected string $description = ''
-    ){
+    ) {
     }
 
     public function getTitle(): string

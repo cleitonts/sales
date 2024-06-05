@@ -14,7 +14,7 @@ final class DeleteTaskCommandHandler
     public function __construct(
         private TaskRepositoryInterface $taskRepository,
         private UserFetcherInterface $userFetcher
-    ){
+    ) {
     }
 
     public function __invoke(DeleteTaskCommand $command): void

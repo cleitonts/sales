@@ -14,7 +14,7 @@ final class MakeTaskDeclinedCommandHandler
     public function __construct(
         private TaskRepositoryInterface $taskRepository,
         private UserFetcherInterface $userFetcher
-    ){
+    ) {
     }
 
     public function __invoke(MakeTaskDeclinedCommand $command): void

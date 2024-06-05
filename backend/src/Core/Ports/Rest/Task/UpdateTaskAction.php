@@ -32,7 +32,7 @@ final class UpdateTaskAction
             properties: [
                 new OA\Property(property: 'title', type: 'string'),
                 new OA\Property(property: 'execution_day', type: 'string', example: '2020-01-01 00:00:00'),
-                new OA\Property(property: 'description', type: 'string')
+                new OA\Property(property: 'description', type: 'string'),
             ],
             type: 'object'
         )

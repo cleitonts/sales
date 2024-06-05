@@ -11,7 +11,7 @@ final class TaskDeclinedEventHandler
 {
     public function __construct(
         private LoggerInterface $logger
-    ){
+    ) {
     }
 
     public function __invoke(TaskDeclinedEvent $event): void

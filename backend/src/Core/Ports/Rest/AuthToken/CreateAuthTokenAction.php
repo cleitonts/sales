@@ -7,10 +7,7 @@ namespace App\Core\Ports\Rest\AuthToken;
 use App\Core\Application\Command\AuthToken\CreateAuthToken\CreateAuthTokenCommand;
 use App\Shared\Infrastructure\Http\HttpSpecEnum;
 use App\Shared\Infrastructure\Http\ParamFetcher;
-use App\Shared\Infrastructure\ValueObject\Pagination;
-use False\Properties;
 use OpenApi\Attributes as OA;
-use phpDocumentor\Reflection\Php\Property;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -34,7 +31,7 @@ final class CreateAuthTokenAction
         content: new OA\JsonContent(
             properties: [
                 new OA\Property(property: 'username', type: 'string'),
-                new OA\Property(property: 'password', type: 'string')
+                new OA\Property(property: 'password', type: 'string'),
             ],
             type: 'object'
         )
@@ -44,7 +41,7 @@ final class CreateAuthTokenAction
         description: HttpSpecEnum::STR_HTTP_CREATED->value,
         content: new OA\JsonContent(
             properties: [
-                new OA\Property(property: 'token', type: 'string')
+                new OA\Property(property: 'token', type: 'string'),
             ],
             type: 'object'
         )

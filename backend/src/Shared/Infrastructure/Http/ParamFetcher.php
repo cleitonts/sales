@@ -41,9 +41,10 @@ final class ParamFetcher
     public static function fromRequestBody(Request $request): self
     {
         $content = $request->getContent();
-        if($content){
+        if ($content) {
             return new self(json_decode($content, true));
         }
+
         return new self($request->request->all());
     }
 

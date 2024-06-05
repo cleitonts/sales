@@ -13,7 +13,7 @@ final class CreateAuthTokenCommandHandler
 {
     public function __construct(
         private readonly UserPasswordHasherInterface $userPasswordEncoder,
-        private readonly UserRepositoryInterface     $userRepository,
+        private readonly UserRepositoryInterface $userRepository,
         private readonly JWTTokenManagerInterface $JWTTokenManager
     ) {
     }

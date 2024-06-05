@@ -16,7 +16,7 @@ final class GetTaskQueryHandler
     public function __construct(
         private EntityManagerInterface $em,
         private UserFetcherInterface $userFetcher
-    ){
+    ) {
     }
 
     public function __invoke(GetTaskQuery $query): TaskDTO

@@ -7,7 +7,6 @@ namespace App\Core\Ports\Rest\Task;
 use App\Core\Application\Command\Task\CreateTask\CreateTaskCommand;
 use App\Shared\Infrastructure\Http\HttpSpecEnum;
 use App\Shared\Infrastructure\Http\ParamFetcher;
-use App\Shared\Infrastructure\Type\DateTimeFormatEnum;
 use OpenApi\Attributes as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,7 +15,6 @@ use Symfony\Component\Messenger\HandleTrait;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\Validator\Constraints\Date;
 
 final class CreateTaskAction
 {
@@ -28,7 +26,6 @@ final class CreateTaskAction
     {
         $this->messageBus = $commandBus;
         $this->router = $router;
-
     }
 
     #[Route('/api/tasks', methods: ['POST'])]
@@ -43,7 +40,7 @@ final class CreateTaskAction
                     type: 'string',
                     example: '2020-01-01 00:00:00',
                 ),
-                new OA\Property(property: 'description', type: 'string')
+                new OA\Property(property: 'description', type: 'string'),
             ],
             type: 'object'
         )

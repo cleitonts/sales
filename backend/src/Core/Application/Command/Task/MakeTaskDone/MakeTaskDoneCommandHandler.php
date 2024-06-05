@@ -14,7 +14,7 @@ final class MakeTaskDoneCommandHandler
     public function __construct(
         private TaskRepositoryInterface $taskRepository,
         private UserFetcherInterface $userFetcher
-    ){
+    ) {
     }
 
     public function __invoke(MakeTaskDoneCommand $command): void

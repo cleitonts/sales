@@ -14,7 +14,7 @@ final class UpdateTaskCommandHandler
     public function __construct(
         private TaskRepositoryInterface $taskRepository,
         private UserFetcherInterface $userFetcher
-    ){
+    ) {
     }
 
     public function __invoke(UpdateTaskCommand $command): void

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Core\Application\Command\User\CreateUser;
 
-use App\Core\Domain\Model\User\UniqueUsernameSpecificationInterface;
 use App\Core\Domain\Model\User\User;
 use App\Core\Domain\Model\User\UserRepositoryInterface;
 use App\Shared\Domain\Exception\InvalidInputDataException;

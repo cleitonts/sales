@@ -11,10 +11,9 @@ final class UpdateTaskCommand extends TaskCommand
     public function __construct(
         private int $id,
         string $title,
-        \DateTimeImmutable
-        $executionDay,
+        \DateTimeImmutable $executionDay,
         string $description = ''
-    ){
+    ) {
         parent::__construct($title, $executionDay, $description);
     }
 

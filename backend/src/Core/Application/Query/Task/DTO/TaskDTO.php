@@ -35,6 +35,7 @@ final class TaskDTO
 
     /**
      * @param array<string, mixed> $data
+     *
      * @throws \Exception
      */
     public static function fromQueryArray(array $data): TaskDTO

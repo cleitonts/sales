@@ -10,9 +10,9 @@ use App\Shared\Domain\Model\Aggregate;
 use App\Shared\Domain\Service\Assert\Assert;
 use Doctrine\ORM\Mapping as ORM;
 
-
 /**
  * @ORM\Entity()
+ *
  * @ORM\Table(name="task",
  *     indexes={@ORM\Index(name="task_status_idx", columns={"status"})}
  * )
@@ -21,7 +21,9 @@ class Task extends Aggregate
 {
     /**
      * @ORM\Id()
+     *
      * @ORM\GeneratedValue()
+     *
      * @ORM\Column(type="integer", options={"unsigned"=true})
      */
     private int $id;
@@ -37,6 +39,7 @@ class Task extends Aggregate
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Core\Domain\Model\User\User")
+     *
      * @ORM\JoinColumn(onDelete="cascade", nullable=false)
      */
     private User $user;
@@ -76,11 +79,11 @@ class Task extends Aggregate
 
     public function done(): void
     {
-        if ($this->status == StatusEnum::DONE) {
+        if (StatusEnum::DONE == $this->status) {
             return;
         }
 
-        if ($this->status == StatusEnum::DECLINED) {
+        if (StatusEnum::DECLINED == $this->status) {
             throw new BusinessLogicViolationException('Declined task can\'t be done');
         }
 
@@ -90,17 +93,18 @@ class Task extends Aggregate
 
     public function decline(): void
     {
-        if ($this->status == StatusEnum::DECLINED) {
+        if (StatusEnum::DECLINED == $this->status) {
             return;
         }
 
-        if ($this->status == StatusEnum::DONE) {
+        if (StatusEnum::DONE == $this->status) {
             throw new BusinessLogicViolationException('Done task can\'t be declined');
         }
 
         $this->setStatus(StatusEnum::DECLINED);
         $this->raise(new TaskDeclinedEvent($this));
     }
+
     public function getId(): int
     {
         return $this->id;

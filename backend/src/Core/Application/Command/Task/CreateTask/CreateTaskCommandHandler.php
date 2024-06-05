@@ -13,7 +13,7 @@ final class CreateTaskCommandHandler
     public function __construct(
         private TaskRepositoryInterface $taskRepository,
         private UserFetcherInterface $userFetcher
-    ){
+    ) {
     }
 
     public function __invoke(CreateTaskCommand $command): int

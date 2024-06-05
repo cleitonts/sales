@@ -19,7 +19,7 @@ final class GetTasksQueryHandler
         private EntityManagerInterface $em,
         private UserFetcherInterface $userFetcher,
         private TaskRepository $taskRepository
-    ){
+    ) {
     }
 
     public function __invoke(GetTasksQuery $query): PaginatedData
@@ -27,7 +27,7 @@ final class GetTasksQueryHandler
         $userId = $this->userFetcher->fetchRequiredUser()->getId();
 
         $qb = $this->taskRepository->GetAll($query, $userId);
-//        $tasks = $this->em->getConnection()->executeQuery($qb->getSQL(), $qb->getParameters())->fetchAllAssociative();
+        //        $tasks = $this->em->getConnection()->executeQuery($qb->getSQL(), $qb->getParameters())->fetchAllAssociative();
 
         $taskDTOs = [];
 
@@ -36,6 +36,7 @@ final class GetTasksQueryHandler
         }
 
         $total = $this->countAllResults($qb);
+
         return new PaginatedData($taskDTOs, $total);
     }
 }
