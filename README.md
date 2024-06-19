@@ -1,4 +1,4 @@
-# 🐳 Docker + PHP 8 + Nginx + Symfony 6 (Messenger, mailer) + PostgreSQL
+# 🐳 Docker + PHP 8 + Nginx + Symfony 6 (DDD, Messenger) + PostgreSQL
 
 ## Description
 
