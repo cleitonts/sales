@@ -1,4 +1,4 @@
-# 🐳 Docker + PHP 8 + PostgreSQL + Vue 3 + Typescript + Nginx + Symfony 6 (Messenger, mailer) + Redis
+# 🐳 Docker + PHP 8 + Nginx + Symfony 6 (Messenger, mailer) + PostgreSQL
 
 ## Description
 
@@ -15,3 +15,16 @@ It is composed by 3 services:
 1. 😀 Clone this rep.
 
 2. Run `docker-compose up -d`
+
+## Usage
+If everything went well, you can check the api in: 
+http://localhost:8080/api/doc
+
+## Tools
+
+you can run php code quality tools like phpcs, phpstan and deptrac 
+bashing into php-fpm container and running:
+
+* `php ./vendor/bin/phpstan analyse ./src/`
+* `php ./vendor/bin/deptrac`
+* `php ./vendor/bin/php-cs-fixer fix`

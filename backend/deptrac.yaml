@@ -46,6 +46,8 @@ deptrac:
       - SharedInfrastructure
     CoreInfrastructure:
       - CoreDomain
+      - SharedDomain
+      - SharedInfrastructure
     SharedDomain: ~
     SharedInfrastructure:
       - SharedDomain
