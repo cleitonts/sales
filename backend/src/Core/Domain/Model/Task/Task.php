@@ -26,7 +26,7 @@ class Task extends Aggregate
      *
      * @ORM\Column(type="integer", options={"unsigned"=true})
      */
-    private int $id;
+    private string $id;
 
     /** @ORM\Column(type="string", length=100, nullable=false) */
     private string $title;
@@ -105,7 +105,7 @@ class Task extends Aggregate
         $this->raise(new TaskDeclinedEvent($this));
     }
 
-    public function getId(): int
+    public function getId(): string
     {
         return $this->id;
     }

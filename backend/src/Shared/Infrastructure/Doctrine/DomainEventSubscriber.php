@@ -5,13 +5,12 @@ declare(strict_types=1);
 namespace App\Shared\Infrastructure\Doctrine;
 
 use App\Shared\Domain\Model\Aggregate;
-use Doctrine\Common\EventSubscriber;
-use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PostFlushEventArgs;
-use Doctrine\ORM\Events;
+use Doctrine\ORM\Event\PostPersistEventArgs;
+use Doctrine\Persistence\Event\LifecycleEventArgs;
 use Symfony\Component\Messenger\MessageBusInterface;
 
-final class DomainEventSubscriber implements EventSubscriber
+final class DomainEventSubscriber
 {
     /**
      * @var Aggregate[]
@@ -25,17 +24,7 @@ final class DomainEventSubscriber implements EventSubscriber
         $this->eventBus = $eventBus;
     }
 
-    public function getSubscribedEvents(): array
-    {
-        return [
-            Events::postPersist,
-            Events::postUpdate,
-            Events::postRemove,
-            Events::postFlush,
-        ];
-    }
-
-    public function postPersist(LifecycleEventArgs $args): void
+    public function postPersist(PostPersistEventArgs $args): void
     {
         $this->keepAggregateRoots($args);
     }
@@ -61,7 +50,7 @@ final class DomainEventSubscriber implements EventSubscriber
 
     private function keepAggregateRoots(LifecycleEventArgs $args): void
     {
-        $entity = $args->getEntity();
+        $entity = $args->getObject();
 
         if (!($entity instanceof Aggregate)) {
             return;

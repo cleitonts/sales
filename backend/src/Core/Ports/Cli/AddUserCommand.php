@@ -9,14 +9,13 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
+use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\HandleTrait;
 use Symfony\Component\Messenger\MessageBusInterface;
 
 final class AddUserCommand extends Command
 {
     use HandleTrait;
-
-    public const MIN_PASSWORD_LENGTH = 5;
 
     protected static $defaultName = 'app:create-user';
 
@@ -30,33 +29,28 @@ final class AddUserCommand extends Command
     {
         $helper = $this->getHelper('question');
 
-        $question = new Question('Please enter the username [admin] : ', 'admin');
-        $userName = (string) $helper->ask($input, $output, $question);
+        $question = new Question('Please enter the username: ');
+        $userName = (string)$helper->ask($input, $output, $question);
 
-        if ('' === $userName) {
-            $output->writeln('<error>User name should be not blank</error>');
-        }
-
-        $question = new Question('Please enter the password : ');
+        $question = new Question('Please enter the password: ');
         $question->setHidden(true);
-        $password = (string) $helper->ask($input, $output, $question);
+        $password = (string)$helper->ask($input, $output, $question);
 
-        if (\strlen($password) < self::MIN_PASSWORD_LENGTH) {
-            $output->writeln('<error>Password is to short, need more than 4 symbols (bytes)</error>');
-        }
-
-        $question = new Question('Please repeat the password : ');
+        $question = new Question('Please repeat the password: ');
         $question->setHidden(true);
-        $passwordRepeat = (string) $helper->ask($input, $output, $question);
+        $passwordRepeat = (string)$helper->ask($input, $output, $question);
 
-        if ($password !== $passwordRepeat) {
-            $output->writeln('<error>Passwords dont match</error>');
+        try {
+            $this->handle(new CreateUserCommand($userName, $password, $passwordRepeat));
+        } catch (HandlerFailedException $e) {
+            $output->writeln('<fg=yellow>Error: </><fg=red>' . $e->getPrevious()->getMessage() . '</>');
+            return 1;
+        } catch (\Exception $e) {
+            $output->writeln('<fg=yellow>Error: </><fg=red>' . $e->getMessage() . '</>');
+            return 1;
         }
-
-        $this->handle(new CreateUserCommand($userName, $password));
 
         $output->writeln('<info>User created</info>');
-
         return 0;
     }
 }

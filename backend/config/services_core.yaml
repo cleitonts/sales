@@ -4,54 +4,61 @@ services:
     autowire: true      # Automatically injects dependencies in your services.
     autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
-  App\Core\Ports\Rest\:
+  core_controllers:
     resource: '../src/Core/Ports/Rest'
+    namespace: App\Core\Ports\Rest\
     tags: [ 'controller.service_arguments' ]
 
-  command_handlers:
-    resource: '../src/Core/Application/Command/*/*/*CommandHandler.php'
-    namespace: App\Core\Application\Command\
-    autoconfigure: false
-    tags:
-      - { name: messenger.message_handler, bus: command.bus }
-
-  query_handlers:
-    namespace: App\Core\Application\Query\
-    resource: '../src/Core/Application/Query/*/*/*QueryHandler.php'
-    autoconfigure: false
-    tags:
-      - { name: messenger.message_handler, bus: query.bus }
-
-  event_handlers:
-    namespace: App\Core\Application\
-    resource: '../src/Core/Application/**/*EventHandler.php'
-    autoconfigure: false
-    tags:
-      - { name: messenger.message_handler, bus: event.bus }
-
-  infrastructure:
-    namespace: App\Core\Infrastructure\
-    resource: '../src/Core/Infrastructure/**/*.php'
+  core_factories:
+    namespace: App\Core\Domain\Factory\
+    resource: '../src/Core/Domain/Factory/*/*Factory.php'
     autoconfigure: false
 
-  repositories:
-    namespace: App\Core\Infrastructure\Repository\
-    resource: '../src/Core/Infrastructure/Repository/*Repository.php'
-    autoconfigure: false
-    tags:
-      - { name: doctrine.repository_service }
-
-  symfony_commands:
+  core_symfony_commands:
     namespace: App\Core\Ports\Cli\
     resource: '../src/Core/Ports/Cli/*Command.php'
     autoconfigure: false
     tags:
       - { name: console.command }
 
+  core_command_handlers:
+    resource: '../src/Core/Application/Command/*/*/*CommandHandler.php'
+    namespace: App\Core\Application\Command\
+    autoconfigure: false
+    tags:
+      - { name: messenger.message_handler, bus: command.bus }
+
+  core_query_handlers:
+    namespace: App\Core\Application\Query\
+    resource: '../src/Core/Application/Query/*/*/*QueryHandler.php'
+    autoconfigure: false
+    tags:
+      - { name: messenger.message_handler, bus: query.bus }
+
+  core_event_handlers:
+    namespace: App\Core\Application\
+    resource: '../src/Core/Application/**/*EventHandler.php'
+    autoconfigure: false
+    tags:
+      - { name: messenger.message_handler, bus: event.bus }
+
+  core_infrastructure:
+    namespace: App\Core\Infrastructure\
+    resource: '../src/Core/Infrastructure/**/*.php'
+    autoconfigure: false
+
+  core_repositories:
+    namespace: App\Core\Infrastructure\Repository\
+    resource: '../src/Core/Infrastructure/Repository/*Repository.php'
+    autoconfigure: false
+    tags:
+      - { name: doctrine.repository_service }
+
+  #service alias
   App\Core\Domain\Model\User\UserRepositoryInterface: '@App\Core\Infrastructure\Repository\UserRepository'
 
   App\Core\Domain\Model\Task\TaskRepositoryInterface: '@App\Core\Infrastructure\Repository\TaskRepository'
 
   App\Core\Domain\Model\User\UserFetcherInterface: '@App\Core\Infrastructure\Security\UserFetcher'
 
-  App\Core\Domain\Model\User\UniqueUsernameSpecificationInterface: '@App\Core\Infrastructure\Specification\User\UniqueUsernameSpecification'
+#  App\Core\Domain\Model\User\UniqueUsernameSpecificationInterface: '@App\Core\Infrastructure\Specification\User\UniqueUsernameSpecification'

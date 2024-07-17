@@ -6,5 +6,5 @@ namespace App\Shared\Domain\Model;
 
 interface EntityInterface
 {
-    public function getId(): int;
+    public function getId(): string;
 }

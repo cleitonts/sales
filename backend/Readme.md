@@ -74,3 +74,12 @@ Query model represented by DTOs. Domain and Command layers are covered by unit t
     └── Infrastructure
 
 ```
+tactical implementation
+```
+├── Registers
+│   ├── Application
+│   ├── Domain
+│   ├── Infrastructure
+├── Core
+
+```

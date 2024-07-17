@@ -9,11 +9,6 @@ services:
       args:
         - INSTALL_XDEBUG=${INSTALL_XDEBUG}
         - ENV=${ENV}
-        - DB_NAME=${POSTGRES_DB}
-        - DB_USER=${POSTGRES_USER}
-        - DB_PASS=${POSTGRES_PASSWORD}
-        - DB_HOST=${POSTGRES_HOST}
-        - DB_PORT=${POSTGRES_PORT}
     environment:
       PHP_IDE_CONFIG: "serverName=localhost"
     expose:

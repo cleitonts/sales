@@ -11,7 +11,7 @@ abstract class Aggregate implements EntityInterface
      */
     private array $events = [];
 
-    abstract public function getId(): int;
+    abstract public function getId(): string;
 
     /**
      * @return DomainEventInterface[]

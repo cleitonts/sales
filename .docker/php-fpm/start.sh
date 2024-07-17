@@ -2,24 +2,8 @@
 cd /var/www
 echo "============> Iniciando instalação"
 
-declare -A REP
-
-echo "------> Criando .env.$ENV"
-touch /var/www/.env.$ENV
-echo "DATABASE_URL='pgsql://$DB_USER:$DB_PASS@$DB_HOST:$DB_PORT/$DB_NAME'" > /var/www/.env.$ENV
-echo "APP_ENV=$ENV" >> /var/www/.env.$ENV
-
 echo "------> Composer install"
-
-if [ "$ENV" = "prod" ]
-then
-  echo "------> ENV $ENV"
-#	composer install --no-dev --optimize-autoloader
-  composer install --no-suggest --quiet
-  composer dump-env prod
-else
-	composer install --no-suggest --quiet
-fi
+composer install --no-suggest --quiet
 
 chmod a+rw -R /var/www
 

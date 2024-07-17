@@ -20,7 +20,7 @@ class UserRepository extends ServiceEntityRepository implements UserRepositoryIn
     {
         return $this->createQueryBuilder('u')
             ->where('u.username = :username')
-            ->setParameters(['username' => $username])
+            ->setParameter('username', $username)
             ->getQuery()->getOneOrNullResult();
     }
 
@@ -41,7 +41,7 @@ class UserRepository extends ServiceEntityRepository implements UserRepositoryIn
         return null === $this->createQueryBuilder('u')
                 ->select('u.username')
                 ->where('u.username = :username')
-                ->setParameters(['username' => $username])
+                ->setParameter('username', $username)
                 ->getQuery()->getOneOrNullResult();
     }
 }

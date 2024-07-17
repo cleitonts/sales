@@ -1,7 +1,7 @@
 # This file is the entry point to configure your own services.
 # Files in the packages/ subdirectory configure your dependencies.
 imports:
-    - { resource: ./servicesCore.yaml }
+    - { resource: ./services_core.yaml }
 
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
@@ -19,7 +19,10 @@ services:
 
     App\Shared\Infrastructure\Doctrine\DomainEventSubscriber:
         tags:
-            - { name: 'doctrine.event_subscriber' }
+            - { name: doctrine.event_listener, event: postPersist }
+            - { name: doctrine.event_listener, event: postUpdate }
+            - { name: doctrine.event_listener, event: postRemove }
+            - { name: doctrine.event_listener, event: postFlush }
 
 
 #    app.event.jwt_created_listener:

@@ -10,49 +10,41 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-/**
- * @ORM\Entity()
- *
- * @ORM\Table(name="`user`")
- */
+#[ORM\Entity]
+#[ORM\Table(name: '`user`')]
 class User extends Aggregate implements UserInterface, PasswordAuthenticatedUserInterface
 {
     public const DEFAULT_USER_ROLE = 'ROLE_USER';
     public const MAX_USER_NAME_LENGTH = 180;
     public const MAX_PASSWORD_LENGTH = 255;
 
-    /**
-     * @ORM\Id()
-     *
-     * @ORM\GeneratedValue()
-     *
-     * @ORM\Column(type="integer", options={"unsigned"=true})
-     */
-    private int $id;
+    #[ORM\Id, ORM\Column(type: 'string', options: ['unsigned' => true])]
+    private string $id;
 
-    /** @ORM\Column(type="string", length=180, unique=true) */
+    #[ORM\Column(type: 'string', length: 180, unique: true)]
     private string $username;
 
     /**
      * @var array<int, string>
-     *
-     * @ORM\Column(type="json", nullable=false)
      */
+    #[ORM\Column(type: 'json', nullable: false)]
     private array $roles = [];
 
-    /**  @ORM\Column(type="string", nullable=false) */
+    #[ORM\Column(type: 'string', length: 255)]
     private string $password;
 
-    /** @ORM\Column(type="datetime_immutable", options={"default"="CURRENT_TIMESTAMP"}, nullable=false) */
+    #[ORM\Column(type: 'datetime_immutable', nullable: false, options: ['default' => 'CURRENT_TIMESTAMP'])]
     private \DateTimeImmutable $createdAt;
 
     /**
      * @param array|string[] $roles
      */
     public function __construct(
+        string $uuid,
         string $username,
         array $roles = [self::DEFAULT_USER_ROLE]
     ) {
+        $this->id = $uuid;
         $this->setUsername($username);
         $this->setRoles($roles);
         $this->setCreatedAt(new \DateTimeImmutable());
@@ -73,7 +65,7 @@ class User extends Aggregate implements UserInterface, PasswordAuthenticatedUser
         return $this->username;
     }
 
-    public function getId(): int
+    public function getId(): string
     {
         return $this->id;
     }
