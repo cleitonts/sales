@@ -10,6 +10,7 @@
 /backend/public/bundles/
 /backend/var/
 /backend/vendor/
+/backend/*cache
 ###< symfony/framework-bundle ###
 
 ###> lexik/jwt-authentication-bundle ###

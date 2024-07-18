@@ -1,6 +1,11 @@
 FROM php:8.3.9-fpm-alpine3.20
 
-RUN echo "------> ENV ${ENV}"
+ARG UID=1000
+ARG GID=1000
+
+RUN addgroup -g "${GID}" php-admin \
+    && adduser -u "${UID}" -G php-admin -h /home/php-admin -D -s /bin/sh php-admin \
+    && addgroup php-admin root
 
 RUN apk update && apk add \
     openssl \
@@ -23,19 +28,6 @@ RUN docker-php-ext-install \
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer
 
-WORKDIR /var/www
-COPY ./backend /var/www
-RUN chmod 755 -R /var/www
-
-RUN chown -R www-data:www-data /var/www
-#USER www-data
-#RUN composer install --no-suggest --quiet
-#RUN php bin/console lexik:jwt:generate-keypair --skip-if-exists
-#RUN php bin/console doctrine:database:create --if-not-exists
-#RUN php bin/console --no-interaction doctrine:migrations:migrate
-USER root
-RUN chmod -R 775 /var/www/var
-
 # Xdebug
 ARG INSTALL_XDEBUG=false
 RUN if [ ${INSTALL_XDEBUG} ]; \
@@ -45,4 +37,16 @@ RUN if [ ${INSTALL_XDEBUG} ]; \
 COPY ./.docker/php-fpm/xdebug.ini "${PHP_INI_DIR}/conf.d"
 COPY ./.docker/php-fpm/error_reporting.ini "${PHP_INI_DIR}/conf.d"
 
+COPY ./.docker/php-fpm/start.sh "/usr/local/bin/start.sh"
+RUN chmod +x "/usr/local/bin/start.sh"
+
+WORKDIR /var/www
+COPY ./backend /var/www
+
+RUN chown -R php-admin:php-admin /var/www \
+    && chmod 755 -R /var/www
+
+USER php-admin
+
+ENTRYPOINT ["/usr/local/bin/start.sh"]
 CMD ["php-fpm"]

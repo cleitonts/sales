@@ -1,22 +1,18 @@
 #!/bin/bash
-cd /var/www
-echo "============> Iniciando instalação"
 
 echo "------> Composer install"
-composer install --no-suggest --quiet
+cd /var/www
 
-chmod a+rw -R /var/www
+composer install --no-suggest --quiet
 
 echo "------> Key gen"
 php bin/console lexik:jwt:generate-keypair --skip-if-exists
-
-echo "============> Instalação concluída"
 
 echo "------> Doctrine migrations"
 php bin/console doctrine:database:create --if-not-exists
 php bin/console --no-interaction doctrine:migrations:migrate
 
-chmod -R 775 /var/www/var
-chown -R www-data:www-data /var/www/
+chmod -R 777 /var/www/var
+echo "------> Done"
 
 php-fpm -R
